@@ -1,3 +1,7 @@
+package com.myweather.android.ui.place
+
+import PlaceViewModel
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,10 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.myweather.android.R
 import com.myweather.android.ui.place.PlaceAdapter
+import com.myweather.android.ui.weather.WeatherActivity
 
 class PlaceFragment : Fragment() {
 
-    private val viewModel by lazy { ViewModelProvider(this).get(PlaceViewModel::class.java)}
+    val viewModel by lazy { ViewModelProvider(this).get(PlaceViewModel::class.java)}
 
     private lateinit var adapter: PlaceAdapter
     private lateinit var recyclerView: RecyclerView
@@ -30,13 +35,23 @@ class PlaceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        if(viewModel.isPlaceSaved()){
+            val place = viewModel.getSavedPlace()
+            val intent = Intent(context,WeatherActivity::class.java).apply{
+                putExtra("location_lng",place.location.lng)
+                putExtra("location_lat",place.location.lat)
+                putExtra("place_name",place.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
         recyclerView = view.findViewById(R.id.recyclerView)
         bgImageView = view.findViewById(R.id.bgImageView)
         searchPlaceEdit = view.findViewById(R.id.searchPlaceEdit)
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = PlaceAdapter(requireContext(), viewModel.placeList)
+        adapter = PlaceAdapter(this, viewModel.placeList)
         recyclerView.adapter = adapter
 
         searchPlaceEdit.addTextChangedListener(object : TextWatcher {

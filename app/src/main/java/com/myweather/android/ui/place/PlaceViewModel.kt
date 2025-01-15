@@ -4,6 +4,7 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import com.myweather.android.logic.Repository
+import com.myweather.android.logic.dao.PlaceDao
 import com.myweather.android.logic.model.Place
 
 class PlaceViewModel : ViewModel() {
@@ -23,4 +24,10 @@ class PlaceViewModel : ViewModel() {
     fun searchPlaces(query: String) {
         searchLiveData.value = query
     }
+
+    fun savePlace(place: Place) = PlaceDao.savePlace(place)
+
+    fun getSavedPlace() = PlaceDao.getSavedPlace()
+
+    fun isPlaceSaved() = PlaceDao.isPlaceSaved()
 }

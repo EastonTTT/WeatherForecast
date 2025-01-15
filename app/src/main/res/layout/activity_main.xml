@@ -7,5 +7,5 @@
         android:id="@+id/placeFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="PlaceFragment" />
+        android:name="com.myweather.android.ui.place.PlaceFragment" />
 </FrameLayout>
